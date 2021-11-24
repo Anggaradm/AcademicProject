@@ -305,6 +305,11 @@ public class DataNilai extends javax.swing.JFrame {
         jLabel6.setText("SEARCH");
 
         txtcari.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
+        txtcari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtcariKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -350,7 +355,23 @@ public class DataNilai extends javax.swing.JFrame {
     }//GEN-LAST:event_txtnamaActionPerformed
 
     private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
-        // TODO add your handling code here:
+        try {
+            int reply = JOptionPane.showConfirmDialog(this, "Apakah anda yakin ingin menghapus data ini?",
+                    "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (reply == JOptionPane.YES_OPTION) {
+                String sql = "DELETE FROM nilaimakul WHERE nim = '" + cbonim.getSelectedItem() + "'";
+                       sql += "&& makul = '" + tabdata.getValueAt(tabdata.getSelectedRow(), 2).toString() + "'";
+                statement.executeUpdate(sql);
+            }
+        } catch (Exception DBException) {
+            JOptionPane.showMessageDialog(this, "Hapus data gagal", "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error=" + DBException);
+        }
+        bersih();
+        loaddata();
+        btnsave.setEnabled(true);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
     }//GEN-LAST:event_btndeleteActionPerformed
 
     private void txtmakulActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtmakulActionPerformed
@@ -392,6 +413,7 @@ public class DataNilai extends javax.swing.JFrame {
         }
         bersih();
         loaddata();
+        cbonim.requestFocus();
     }//GEN-LAST:event_btnsaveActionPerformed
 
     private void btncancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncancelActionPerformed
@@ -411,7 +433,26 @@ public class DataNilai extends javax.swing.JFrame {
     }//GEN-LAST:event_tabdataMouseClicked
 
     private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql;
+            {
+                sql = "UPDATE nilaimakul SET makul = '";
+                sql += txtmakul.getText() + "', nilai = '";
+                sql += cbonilai.getSelectedItem() + "'";
+                sql += "WHERE nim = '" + cbonim.getSelectedItem() + "'";
+                sql += "&& makul = '" + tabdata.getValueAt(tabdata.getSelectedRow(), 2).toString() + "'";
+            }
+            statement.executeUpdate(sql);
+            JOptionPane.showMessageDialog(this, "Update data berhasil", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception DBException) {
+            JOptionPane.showMessageDialog(this, "Update data gagal", "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Error=" + DBException);
+        }
+        bersih();
+        loaddata();
+        btnsave.setEnabled(true);
+        btnupdate.setEnabled(false);
+        btndelete.setEnabled(false);
     }//GEN-LAST:event_btnupdateActionPerformed
 
     private void cbonimItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbonimItemStateChanged
@@ -430,6 +471,30 @@ public class DataNilai extends javax.swing.JFrame {
     private void btnreloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreloadActionPerformed
         loadnama();
     }//GEN-LAST:event_btnreloadActionPerformed
+
+    private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcariKeyPressed
+       DefaultTableModel tabel = new DefaultTableModel();
+       tabel.addColumn("NIM");
+       tabel.addColumn("NAMA");
+       tabel.addColumn("MAKUL");
+       tabel.addColumn("NILAI"); 
+       
+        try {
+            String sql = "SELECT nilaimakul.nim, mahasiswa.nama, nilaimakul.makul, nilaimakul.nilai FROM mahasiswa, nilaimakul WHERE nilaimakul.nim like '%" + txtcari.getText() + "%'";
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                tabel.addRow(new Object[]{
+                    rs.getString(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4)
+            });
+                tabdata.setModel(tabel);
+            }
+        } catch (Exception DBException) {
+            System.err.println("Error=" + DBException);
+        }
+    }//GEN-LAST:event_txtcariKeyPressed
 
     /**
      * @param args the command line arguments
