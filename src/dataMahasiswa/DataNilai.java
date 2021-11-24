@@ -44,11 +44,25 @@ public class DataNilai extends javax.swing.JFrame {
         ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 cbonim.addItem(rs.getString("nim"));
-                
+            }
+            rs.close();
+            loadnama();
+        } catch (Exception e) {
+            System.err.println("Terjadi Kesalahan");
+        }
+        
+    }
+    
+    private void loadnama(){
+        try {
+        String sql = "SELECT * FROM mahasiswa WHERE nim = '" + cbonim.getSelectedItem() + "'";
+        ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                txtnama.setText(rs.getString("nama"));
             }
             rs.close();
         } catch (Exception e) {
-            System.err.println("Terjadi Kesalahan");
+            System.err.println("Terjadi Kesalahan -n");
         }
         
     }
@@ -98,6 +112,7 @@ public class DataNilai extends javax.swing.JFrame {
         btnupdate = new javax.swing.JButton();
         btndelete = new javax.swing.JButton();
         btncancel = new javax.swing.JButton();
+        btnreload = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabdata = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
@@ -129,6 +144,23 @@ public class DataNilai extends javax.swing.JFrame {
 
         cbonim.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
         cbonim.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbonim.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbonimItemStateChanged(evt);
+            }
+        });
+        cbonim.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbonimMouseClicked(evt);
+            }
+        });
+        cbonim.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                cbonimInputMethodTextChanged(evt);
+            }
+        });
 
         cbonilai.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
         cbonilai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih", "A", "AB", "B", "BC", "C", "CD", "D", "E" }));
@@ -180,6 +212,14 @@ public class DataNilai extends javax.swing.JFrame {
             }
         });
 
+        btnreload.setFont(new java.awt.Font("Poppins", 0, 8)); // NOI18N
+        btnreload.setText("reload");
+        btnreload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnreloadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -195,10 +235,13 @@ public class DataNilai extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(56, 56, 56)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtmakul)
                             .addComponent(cbonilai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbonim, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtmakul)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnreload))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnsave)
@@ -208,7 +251,7 @@ public class DataNilai extends javax.swing.JFrame {
                         .addComponent(btndelete)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btncancel)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,7 +263,8 @@ public class DataNilai extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnreload))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -325,6 +369,7 @@ public class DataNilai extends javax.swing.JFrame {
         }
         bersih();
         loaddata();
+//        loadnama();
         btndelete.setEnabled(false);
         btnupdate.setEnabled(false);
         txtmakul.requestFocus();
@@ -362,11 +407,29 @@ public class DataNilai extends javax.swing.JFrame {
         btndelete.setEnabled(true);
         cbonim.setEditable(false);
         btnsave.setEnabled(false);
+        btnreload.setEnabled(false);
     }//GEN-LAST:event_tabdataMouseClicked
 
     private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnupdateActionPerformed
+
+    private void cbonimItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbonimItemStateChanged
+        
+//        loadnama();
+    }//GEN-LAST:event_cbonimItemStateChanged
+
+    private void cbonimMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbonimMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbonimMouseClicked
+
+    private void cbonimInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_cbonimInputMethodTextChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbonimInputMethodTextChanged
+
+    private void btnreloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnreloadActionPerformed
+        loadnama();
+    }//GEN-LAST:event_btnreloadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,6 +469,7 @@ public class DataNilai extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btncancel;
     private javax.swing.JButton btndelete;
+    private javax.swing.JButton btnreload;
     private javax.swing.JButton btnsave;
     private javax.swing.JButton btnupdate;
     private javax.swing.JComboBox<String> cbonilai;

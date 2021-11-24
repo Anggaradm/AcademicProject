@@ -100,10 +100,14 @@
                           </Group>
                           <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="txtmakul" alignment="0" max="32767" attributes="0"/>
                               <Component id="cbonilai" min="-2" max="-2" attributes="0"/>
                               <Component id="cbonim" alignment="0" min="-2" pref="125" max="-2" attributes="0"/>
-                              <Component id="txtnama" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
-                              <Component id="txtmakul" alignment="0" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="txtnama" min="-2" pref="140" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnreload" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -117,7 +121,7 @@
                           <Component id="btncancel" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -133,6 +137,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtnama" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnreload" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -203,6 +208,11 @@
               </StringArray>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbonimItemStateChanged"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="cbonimMouseClicked"/>
+            <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="cbonimInputMethodTextChanged"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -293,6 +303,17 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btncancelActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnreload">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Poppins" size="8" style="0"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="reload"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnreloadActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
