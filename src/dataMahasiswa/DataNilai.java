@@ -480,7 +480,8 @@ public class DataNilai extends javax.swing.JFrame {
        tabel.addColumn("NILAI"); 
        
         try {
-            String sql = "SELECT nilaimakul.nim, mahasiswa.nama, nilaimakul.makul, nilaimakul.nilai FROM mahasiswa, nilaimakul WHERE nilaimakul.nim like '%" + txtcari.getText() + "%'";
+            String sql = "SELECT mahasiswa.nim, mahasiswa.nama, nilaimakul.makul, nilaimakul.nilai FROM mahasiswa, nilaimakul WHERE nilaimakul.nim like '%" + txtcari.getText() + "%'";
+                   sql += "&& nilaimakul.nim = mahasiswa.nim";
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 tabel.addRow(new Object[]{
